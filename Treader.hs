@@ -2,6 +2,7 @@ module Treader
 ( trillianToMessages
 ) where
 import Numeric
+import Data.List
 import Data.Char
 import Text.XML.Light
 
@@ -33,7 +34,7 @@ decodeList :: [String] -> [String]
 decodeList = map decodePiece
 
 joinStrings :: [String] -> String
-joinStrings = foldr (++) ""
+joinStrings = concat
 
 parseString :: String -> String
 parseString = joinStrings . decodeList . isolateEncoded
