@@ -1,0 +1,19 @@
+<!ELEMENT log (session+)>
+<!ELEMENT session (message*)>
+<!ELEMENT message (timestamp,protocol?,text?,from,msg)>
+<!ELEMENT timestamp (day,month,year?,hour,minute,second?)>
+<!ELEMENT day (#PCDATA)>
+<!ELEMENT month (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT hour (#PCDATA)>
+<!ELEMENT minute (#PCDATA)>
+<!ELEMENT second (#PCDATA)>
+<!ELEMENT protocol (#PCDATA)>
+<!ELEMENT text (font?,size?,color?)>
+<!ELEMENT font (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT color (#PCDATA)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT msg (#PCDATA)>
+
+<!ATTLIST session id CDATA #IMPLIED>
