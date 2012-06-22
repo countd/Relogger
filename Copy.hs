@@ -1,5 +1,7 @@
-module Main
-where
+module Main where
+
+-- a test module for Lreader
+-- it's supposed to copy rplogs
 
 import Preader
 import Logger
@@ -10,17 +12,14 @@ import System.Environment
 import System.Exit
 
 import Logger
-import Preader
+import Lreader
 import Message
-
-fileName :: FilePath -> String
-fileName = reverse . takeWhile (`notElem` ['/', '\\']) . reverse
 
 convertLogs :: FilePath -> String -> IO ()
 convertLogs path sid = do
   contents <- readFile path
-  let messages = pidginToMessage (fileName path) contents
-  let xml = sessionsToXML [(sid,messages)]
+  let sessions = rplogToSessions contents
+  let xml = sessionsToXML sessions
   writeFile (sid ++ ".xml") heading
   appendFile (sid ++ ".xml") xml
   
@@ -30,7 +29,7 @@ usage = do
   name <- getProgName
   putStr "Usage: "
   putStr name
-  putStrLn " pidginLog.html session_name"
+  putStrLn " rplog.xml new-basename"
 
 main = do
   args <- getArgs

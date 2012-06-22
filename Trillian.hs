@@ -13,7 +13,7 @@ convertLogs :: FilePath -> String -> IO ()
 convertLogs path sid = do
   contents <- readFile path
   let messages = trillianToMessages contents
-  let xml = sessionToXML (sid,messages)
+  let xml = sessionsToXML [(sid,messages)]
   writeFile (sid ++ ".xml") heading
   appendFile (sid ++ ".xml") xml
   

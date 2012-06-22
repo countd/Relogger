@@ -4,12 +4,12 @@ module Timestamp
 ) where
 import System.Time
 
-data Timestamp = Timestamp { year :: Int
+data Timestamp = Timestamp { year :: Maybe Int
                            , month :: Int
                            , day :: Int
                            , hour :: Int
                            , minute :: Int
-                           , second :: Int
+                           , second :: Maybe Int
                            } deriving (Show)
 
 parseTimestring :: String -> ClockTime
@@ -23,7 +23,7 @@ monthToInt m = getMonth m
           getMonth = fst . findMonth
 
 parseClockTime :: ClockTime -> Timestamp
-parseClockTime ct = Timestamp tYear tMonth tDay tHour tMinute tSecond
+parseClockTime ct = Timestamp (Just tYear) tMonth tDay tHour tMinute (Just tSecond)
     where calt = toUTCTime ct
           tYear = ctYear calt
           tMonth = monthToInt $ ctMonth calt

@@ -1,6 +1,6 @@
 module Logger
 ( Session(..)
-, sessionToXML
+, sessionsToXML
 , heading
 ) where
 
@@ -9,8 +9,6 @@ import Text.XML.Light
 import Face
 import Timestamp
 import Message
-
-type Session = (String,[Message])
 
 stringToCont :: String -> Content
 stringToCont str = Text $ CData CDataText str Nothing
@@ -28,14 +26,22 @@ simpleAttr :: String -> String -> Attr
 simpleAttr key = Attr $ unqual key
 
 timestampToElem :: Timestamp -> Element
-timestampToElem ts = Element (unqual "timestamp") [] [d,mo,y,h,mi,s] Nothing
-    where conv name f = Elem $ simpleElem name $ intToCont $ f ts
-          d = conv "day" day
-          mo = conv "month" month
-          y = conv "year" year
-          h = conv "hour" hour
-          mi = conv "minute" minute
-          s = conv "second" second
+timestampToElem ts = Element (unqual "timestamp") [] contList Nothing
+    where
+      conv name f = Elem $ simpleElem name $ intToCont $ f ts
+      d = conv "day" day
+      mo = conv "month" month
+      h = conv "hour" hour
+      mi = conv "minute" minute
+      y = case year ts of
+            Nothing -> Elem $ blank_element
+            (Just yr) -> Elem $ simpleElem "year" $ intToCont yr
+      s = case second ts of
+            Nothing -> Elem $ blank_element
+            (Just sc) -> Elem $ simpleElem "second" $ intToCont sc
+      notEmpty (Elem e) = (qName . elName $ e) /= ""
+      purge = filter notEmpty
+      contList = purge [d,mo,y,h,mi,s]
 
 protocolToElem :: Maybe String -> Maybe Element
 protocolToElem Nothing = Nothing
@@ -72,9 +78,9 @@ sessionToElem (ident, msgs) = Element (unqual "session") [simpleAttr "id" ident]
     where msgElements = map messageToElem msgs
           msgElems = map Elem msgElements
 
-sessionToXML :: Session -> String
-sessionToXML session = ppElement logs
-    where logs = Element (unqual "log") [] [Elem $ sessionToElem session] Nothing
+sessionsToXML :: [Session] -> String
+sessionsToXML ss = ppElement logs
+    where logs = Element (unqual "log") [] (map (Elem . sessionToElem) ss) Nothing
 
 heading :: String
 heading = "<?xml version=\"1.0\" ?>\n<!DOCTYPE log SYSTEM \"RPLog.dtd\">\n"

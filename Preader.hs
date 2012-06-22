@@ -89,7 +89,7 @@ readDate filename = (d,m,y)
           d = ymdi !! 2
 
 makeTimestamp' :: Caltime -> Clocktime -> Timestamp
-makeTimestamp' (day,mon,y) (h,min,sec) = Timestamp y mon day h min sec
+makeTimestamp' (day,mon,y) (h,min,sec) = Timestamp (Just y) mon day h min (Just sec)
 
 makeTimestamp :: String -> String -> Timestamp
 makeTimestamp filename time = makeTimestamp' (readDate filename) (readClock time)
