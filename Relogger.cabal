@@ -1,0 +1,26 @@
+name:	 Relogger
+version: 1.0
+synopsis: A utility for processing RP logs
+author: Count D
+license: BSD3
+stability: alpha
+cabal-version: >= 1.2
+build-type: Simple
+
+executable relogger-pidgin
+  build-depends:
+    base,
+    xml,
+    old-time >= 1.0.0.6,
+    directory >= 1.1.0.0
+  ghc-options: -O2
+  main-is: Pidgin.hs
+
+executable relogger-trillian
+  build-depends:
+    base,
+    xml,
+    old-time >= 1.0.0.6,
+    directory >= 1.1.0.0
+  ghc-options: -O2
+  main-is: Trillian.hs

@@ -34,5 +34,4 @@ usage = do
 
 main = do
   args <- getArgs
-  if length args /= 2 then usage >> exitFailure
-  else convertLogs (args !! 0) (args !! 1) >> exitSuccess
+  if length args /= 2 then usage >> exitFailure else convertLogs (args !! 0) (args !! 1) >> exitSuccess
