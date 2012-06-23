@@ -68,6 +68,8 @@ strSplit :: Char -> String -> [String]
 strSplit sep str = strSplit' sep str []
 
 --((h:m:s AM/PM)
+-- hours are an ugly hack due to 12 AM denoting 00:00 in pidgin
+-- and 12 PM -- 12:00
 readClock :: String -> Clocktime
 readClock time = (h, m, s)
     where (t, mod) = span (/= ' ') time
@@ -75,7 +77,11 @@ readClock time = (h, m, s)
           hmsi = map read $ hmss :: [Int]
           modif " AM" = 0
           modif " PM" = 12
-          h = (modif mod) + (head hmsi)
+          h = case head hmsi of
+                12 -> case modif mod of
+                        0 -> 0
+                        _ -> 12
+                _ -> (modif mod) + (head hmsi)
           m = hmsi !! 1
           s = hmsi !! 2
 

@@ -24,3 +24,10 @@ executable relogger-trillian
     directory >= 1.1.0.0
   ghc-options: -O2
   main-is: Trillian.hs
+
+executable relogger-html
+  build-depends:
+    base,
+    xml
+  ghc-options: -O2
+  main-is: Html.hs

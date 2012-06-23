@@ -56,7 +56,7 @@ parseMessage el = Message timestamp protocol text from msg
     where timestamp = stringToTimestamp $ getAttr "time" el
           protocol = Just $ getAttr "medium" el
           text = Nothing
-          from = getAttr "from" el
+          from = getAttr "from_display" el
           msg = getAttr "text" el
 
 elementsToMessages :: [Element] -> [Message]

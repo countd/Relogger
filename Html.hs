@@ -1,8 +1,5 @@
 module Main where
 
--- a test module for Lreader
--- it's supposed to copy rplogs
-
 import Preader
 import Logger
 
@@ -11,17 +8,16 @@ import System.Directory
 import System.Environment
 import System.Exit
 
-import Logger
+import HtmlWriter
 import Lreader
 import Message
 
 convertLogs :: FilePath -> String -> IO ()
-convertLogs path sid = do
+convertLogs path new = do
   contents <- readFile path
   let sessions = rplogToSessions contents
-  let xml = sessionsToXML sessions
-  writeFile (sid ++ ".xml") heading
-  appendFile (sid ++ ".xml") xml
+  let html = sessionsToHtml sessions
+  writeFile new html
   
   
 usage :: IO ()
@@ -29,9 +25,8 @@ usage = do
   name <- getProgName
   putStr "Usage: "
   putStr name
-  putStrLn " rplog.xml new-basename"
+  putStrLn " rplog.xml htmlName.html"
 
 main = do
   args <- getArgs
-  if length args /= 2 then usage >> exitFailure
-  else convertLogs (args !! 0) (args !! 1) >> exitSuccess
+  if length args /= 2 then usage >> exitFailure else convertLogs (args !! 0) (args !! 1) >> exitSuccess
